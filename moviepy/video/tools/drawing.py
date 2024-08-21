@@ -6,22 +6,22 @@ import numpy as np
 import torch
 
 
+# def blit(im1, im2, pos=None, mask=None):
+#     """Blit an image over another.
+
+#     Blits ``im1`` on ``im2`` as position ``pos=(x,y)``, using the
+#     ``mask`` if provided.
+#     """
+#     if pos is None:
+#         pos = (0, 0)  # pragma: no cover
+#     else:
+#         # Cast to tuple in case pos is not subscriptable.
+#         pos = tuple(pos)
+#     im2.paste(im1, pos, mask)
+#     return im2
+
+
 def blit(im1, im2, pos=None, mask=None):
-    """Blit an image over another.
-
-    Blits ``im1`` on ``im2`` as position ``pos=(x,y)``, using the
-    ``mask`` if provided.
-    """
-    if pos is None:
-        pos = (0, 0)  # pragma: no cover
-    else:
-        # Cast to tuple in case pos is not subscriptable.
-        pos = tuple(pos)
-    im2.paste(im1, pos, mask)
-    return im2
-
-
-def blit_gpu(im1, im2, pos=None, mask=None, ismask=False):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     if pos is None:
@@ -64,7 +64,7 @@ def blit_gpu(im1, im2, pos=None, mask=None, ismask=False):
         new_im2[yp1:yp2, xp1:xp2] = mask * blitted + (1 - mask) * blit_region
 
     # return new_im2.cpu().numpy().astype("uint8") if not ismask else new_im2.cpu().numpy()   # 6.13 ms / 100 loops
-    return new_im2 if not ismask else new_im2
+    return new_im2
 
 
 def color_gradient(
